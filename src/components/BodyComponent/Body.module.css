@@ -1,0 +1,15 @@
+.moneyItem{
+    display: flex;
+    
+}
+.itemHeader{
+    width: 200px;
+    text-align: center;
+}
+.header{
+    display: flex;
+}
+.description{
+    width: 200px;
+    margin-bottom: 50px;
+}
