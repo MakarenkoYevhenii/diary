@@ -1,19 +1,14 @@
 import axios from "axios";
 
-
-  const addToken = (token) => {
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-}
   const instance = axios.create({
   baseURL: "http://localhost:4500/api/dails",
 });
-const auth=axios.create({
-  baseURL:"http://localhost:4500/api/user/"
-})
-
-export const allMoney = async () => {
+const addToken = token => {
+  instance.defaults.headers.common.Authorization = `Bearer ${token}`;
+}
+export const allMoney = async (token) => {
   try {
-    
+    addToken(token)
     const data = instance.get(`/`);
     return  (await data).data.contacts;
   } catch (error) {
@@ -28,19 +23,19 @@ export const deleteItemFetch = async (id) => {
     console.log(error);
   }
 };
-export const changeItemFetch = async (id,name,date,description,importance,value) => {
+export const changeItemFetch = async (id,userData) => {
   try {
-    const data = instance.patch(`/${id}`);
+    console.log(userData);
+    const data = instance.patch(`/${id}`,userData);
     return  (await data).data.contacts;
   } catch (error) {
     console.log(error);
   }
 };
-export const Login = async (userData) => {
+export const findItemFetch = async (id) => {
   try {
-    const data = auth.post(`/login`,{email:userData.login,password:userData.password});
-    const token= (await data).data.token
-   addToken(token);
+    const data = instance.patch(`/${id}`);
+    return  (await data).data.contacts;
   } catch (error) {
     console.log(error);
   }

@@ -10,24 +10,44 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
+import { getLogin, getToken, getUser } from "../../redux/auth/auth-selector";
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+
+import { current } from "../../redux/auth/auth-operation";
+import InputChange from "../../share/component/Input/Input";
+
 
 function Body() {
+  const [open, setOpen] = useState(false);
   const [moneyList, setMoney] = useState([]);
+  const [id,setId]=useState("")
+  const userToken=useSelector(getToken,shallowEqual)
+  const loginUser=useSelector(getLogin,shallowEqual)
+  
+  const handleOpen = (id) => {
+    setOpen(true)
+    setId(id)
+  };
+  const handleClose = () => {setOpen(false)
+  setId("")
+  };
+  
+  const dispatch=useDispatch()
 
+  const makeMoney = async () => {
+    try {
+      dispatch(current())
+      const result = await allMoney(userToken);
+      setMoney(result);
+    } catch (error) {
+      // console.log(error);
+    }
+  };
   useEffect(() => {
-    const makeMoney = async () => {
-      try {
-        const result = await allMoney();
-        setMoney(result);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     makeMoney();
   }, []);
 
-  const changeItem = (e) => {};
-
+  
   const deleteItem = (e) => {
     deleteItemFetch(e);
     setMoney(
@@ -38,7 +58,7 @@ function Body() {
   };
   
 return(
-    moneyList === undefined ? 
+  !loginUser ? 
       "Loading" : 
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -69,7 +89,7 @@ return(
                 <TableCell align="right">
                   <Button
                     variant="contained"
-                    onClick={() => changeItem(row._id)}
+                    onClick={() => handleOpen(row._id)}
                   >
                     Изменить
                   </Button>
@@ -86,6 +106,8 @@ return(
             ))}
           </TableBody>
         </Table>
+        <InputChange ModalOpen={open} id={id}
+        handleClose={() => handleClose} fetchNew={()=>makeMoney()}></InputChange>
       </TableContainer>
 )
 }

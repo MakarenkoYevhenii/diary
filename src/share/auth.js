@@ -1,24 +1,35 @@
 import axios from "axios";
 
 
-const addToken = token => {
-    axios.defaults.headers.common.Authorization = `Bearer ${token}`;
-}
 const auth=axios.create({
-    baseURL:"http://localhost:4500/api/user/"
-  })
-  
+  baseURL:"http://localhost:4500/api/user/"
+})
+const addToken = token => {
+   auth.defaults.headers.common.Authorization = `Bearer ${token}`;
+}
+
 export const login = async (userData) => {
     try {
       const data = auth.post(`/login`,{email:userData.login,password:userData.password});
-      console.log(await data);
       const token= (await data).data.token
      addToken(token);
+     return data
     } catch (error) {
       console.log(error);
     }
   };
 
+  export const getCurrent = async (token) => {
+    addToken(token);
+      const {data: result} = await auth.get("/current");
+      return result;
+  }
+  
+  const logout =async()=>{
+      const {data:result}=await auth.get("/logout")
+      console.log(result);
+      return result
+  }
 
 
 
@@ -26,17 +37,6 @@ const signup =async(data)=>{
     const {data:result} =await axios.post("https://connections-api.herokuapp.com/users/signup/",data)
     addToken(result.token)
     return result
-}
-
-const logout =async()=>{
-    const {data:result}=await axios.post("https://connections-api.herokuapp.com/users/logout/")
-    return result
-}
-const getCurrent = async (token) => {
-    addToken(token);
-    const {data: result} = await axios.get("https://connections-api.herokuapp.com/users/current/");
-
-    return result;
 }
 
 
