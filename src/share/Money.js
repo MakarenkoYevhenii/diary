@@ -1,7 +1,7 @@
 import axios from "axios";
 
   const instance = axios.create({
-  baseURL: "http://localhost:4500/api/dails",
+  baseURL: "https://podchitat.herokuapp.com/api/dails",
 });
 const addToken = token => {
   instance.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -25,7 +25,6 @@ export const deleteItemFetch = async (id) => {
 };
 export const changeItemFetch = async (id,userData) => {
   try {
-    console.log(userData);
     const data = instance.patch(`/${id}`,userData);
     return  (await data).data.contacts;
   } catch (error) {
@@ -35,6 +34,14 @@ export const changeItemFetch = async (id,userData) => {
 export const findItemFetch = async (id) => {
   try {
     const data = instance.patch(`/${id}`);
+    return  (await data).data.contacts;
+  } catch (error) {
+    console.log(error);
+  }
+};
+export const createNewItem = async (itenData) => {
+  try {
+    const data = instance.post(`/`,itenData);
     return  (await data).data.contacts;
   } catch (error) {
     console.log(error);

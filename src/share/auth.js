@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const auth=axios.create({
-  baseURL:"http://localhost:4500/api/user/"
+  baseURL:"http://podchitat.herokuapp.com/api/user/"
 })
 const addToken = token => {
    auth.defaults.headers.common.Authorization = `Bearer ${token}`;
@@ -34,7 +34,7 @@ export const login = async (userData) => {
 
 
 const signup =async(data)=>{
-    const {data:result} =await axios.post("https://connections-api.herokuapp.com/users/signup/",data)
+    const {data:result} =await auth.post("/signup",data)
     addToken(result.token)
     return result
 }

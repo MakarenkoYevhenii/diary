@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { Input } from "@mui/material";
 import { useEffect, useState } from "react";
-import { changeItemFetch, findItemFetch } from "../../Money";
+import { changeItemFetch, createNewItem, findItemFetch } from "../../Money";
 
 const style = {
   position: "absolute",
@@ -20,7 +20,6 @@ const style = {
 };
 
 const InputChange = (open) => {
-    console.log(open);
     const [data,setData]=useState([])
     const handleChange = ({ target }) => {
         const { name, value } = target;
@@ -31,8 +30,16 @@ const InputChange = (open) => {
       };
       const submitForm = (e) => {
         e.preventDefault();
+        if (open.id===""||open.id===undefined) {
+            createNewItem(data)
+            open.fetchNew()
+            open.handleClose()
+            return setData("")
+        }
         changeData()
         open.fetchNew()
+        open.handleClose()
+       return setData("")
       };
       const makeMoney = async () => {
         try {
@@ -42,16 +49,14 @@ const InputChange = (open) => {
           console.log(error);
         }
       };
-      
       useEffect(() => {
-        if (open.id==="") {
+        if (open.id===""||open.id===undefined) {
             return
         }
         makeMoney();
     }, [open.id]);
     const changeData = async()=>{
         const result=  await changeItemFetch(open.id,data)
-        console.log(result);
     }
     const {ModalOpen,handleClose}=open
   return (
@@ -76,7 +81,7 @@ const InputChange = (open) => {
             </Typography>
             <Input id="modal-modal-name-input" sx={{width:"100%"}} onChange={handleChange} name="description" value={data.description}></Input>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Importance
+            Category
             </Typography>
             <Input id="modal-modal-name-input" sx={{width:"100%"}} onChange={handleChange} name="importance" value={data.importance}></Input>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -85,7 +90,7 @@ const InputChange = (open) => {
             <Input id="modal-modal-name-input" sx={{width:"100%"}} onChange={handleChange} name="value" value={data.value}></Input>
             <Box sx={{mt:2,textAlign:"center"}}>
               <Button variant="contained" size="large" sx={{mr:5}} type="submit">
-                Change Data{" "}
+               {open.id===""||open.id===undefined? "Create New":"Change Data" } {" "}
               </Button>
               <Button variant="contained" size="large" onClick={handleClose()} >
                 close
