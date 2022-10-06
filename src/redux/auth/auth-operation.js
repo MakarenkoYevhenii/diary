@@ -6,7 +6,7 @@ export const signup=createAsyncThunk(
     "auth/signup",
     async(data,{rejectWithValue})=>{
         try {
-            const result=await authApi.Login(data)
+            const result=await authApi.signup(data)
             return result
         } catch (error) {
 

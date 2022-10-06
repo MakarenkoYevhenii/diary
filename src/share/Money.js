@@ -12,7 +12,7 @@ export const allMoney = async (token) => {
     const data = instance.get(`/`);
     return  (await data).data.contacts;
   } catch (error) {
-    console.log(error);
+    return error
   }
 };
 export const deleteItemFetch = async (id) => {

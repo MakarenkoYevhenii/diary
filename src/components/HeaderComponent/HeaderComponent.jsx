@@ -11,15 +11,17 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 import { getLogin } from "../../redux/auth/auth-selector";
 
-import { login, logout } from "../../redux/auth/auth-operation";
+import { login, logout, signup } from "../../redux/auth/auth-operation";
 
 function Header() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState("");
+  const [version,setVersion]=useState("")
   const dispatch = useDispatch();
   const userIsLogin = useSelector(getLogin, shallowEqual);
-
-  const handleOpen = () => setOpen(true);
+  const handleOpen = (name) => {setOpen(true)
+    setVersion(name)
+  };
   const handleClose = () => setOpen(false);
   const handleChange = ({ target }) => {
     const { name, value } = target;
@@ -31,7 +33,10 @@ function Header() {
   const submitForm = (e) => {
     e.preventDefault();
 
-    dispatch(login(data));
+    if(version==="login"){
+    return  dispatch(login(data));
+    }
+     return dispatch(signup(data))
   };
  const logOut=()=>{
   dispatch(logout())
@@ -55,15 +60,19 @@ function Header() {
               <Button color="inherit" onClick={logOut}>
                 logout
               </Button>
-            ) : (
-              <Button color="inherit" onClick={handleOpen}>
+            ) : (<>
+              <Button color="inherit" onClick={()=>handleOpen("login")} >
                  Login
               </Button>
+              <Button color="inherit" onClick={()=>handleOpen("register")}>
+                 register
+              </Button></>
             )}
           </Toolbar>
         </AppBar>
       </Box>
       <Modal
+        version={version}
         ModalOpen={open}
         handleClose={() => handleClose}
         handleChange={() => handleChange}

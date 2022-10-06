@@ -24,8 +24,7 @@ function Body() {
   const [filter, setFilter] = useState("");
   const userToken = useSelector(getToken, shallowEqual);
   const loginUser = useSelector(getLogin, shallowEqual);
-
-  console.log(loginUser);
+  const [pomulka,setpomulka]=useState("")
   const handleOpen = (id) => {
     setOpen(true);
     setId(id);
@@ -41,9 +40,13 @@ function Body() {
     try {
       dispatch(current());
       const result = await allMoney(userToken);
+      if(result.name==="AxiosError"){
+         return setpomulka(result)
+      }
       setMoney(result);
+      filtere()
+      
     } catch (error) {
-      // console.log(error);
     }
   };
   useEffect(() => {
@@ -68,6 +71,7 @@ function Body() {
       return id.name.includes(filter);
     });
   }
+  
   return !loginUser ? (
     "Loading"
   ) : (
