@@ -16,6 +16,7 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { current } from "../../redux/auth/auth-operation";
 import InputChange from "../../share/component/Input/Input";
 import { Input } from "@mui/material";
+import Charts from "../ChartsComponent/ChartsComponent";
 
 function Body() {
   const [open, setOpen] = useState(false);
@@ -25,6 +26,7 @@ function Body() {
   const userToken = useSelector(getToken, shallowEqual);
   const loginUser = useSelector(getLogin, shallowEqual);
   const [pomulka,setpomulka]=useState("")
+  const [date,setDate]=useState("")
   const handleOpen = (id) => {
     setOpen(true);
     setId(id);
@@ -62,25 +64,41 @@ function Body() {
     );
   };
   const filterName = ({ target }) => {
-    const { name, value } = target;
+    const { value } = target;
     setFilter(value);
   };
 
   const filtere = () => {
-    return moneyList.filter((id) => {
-      return id.name.includes(filter);
-    });
+
+    if(filter.length>0&&date.length>0){
+      console.log("filterAndDate");
+        return moneyList.filter((id)=>{
+         if(id.name.includes(filter)&& id.date.substr(0, 10)===date ){
+          return id
+         } 
+        })
+      }
+    if(date.length>0){
+      return moneyList.filter((id)=>{
+      return id.date.substr(0, 10)===date
+    })
   }
-  
+
+    return moneyList.filter((id)=>{
+      return id.name.includes(filter)})}
+
+
+  console.log(date);
   return !loginUser ? (
     "Loading"
   ) : (
+    <>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Название </TableCell>
-            <TableCell align="right">Дата</TableCell>
+            <TableCell align="right"><Input type="date" onChange={(e)=>{setDate(e.target.value)}}/></TableCell>
             <TableCell align="right">Описание</TableCell>
             <TableCell align="right">Категория</TableCell>
             <TableCell align="right">Стоимость </TableCell>
@@ -135,6 +153,8 @@ function Body() {
         fetchNew={() => makeMoney()}
       ></InputChange>
     </TableContainer>
+  <Charts moneyList={filtere()}></Charts>
+    </>
   );
 }
 

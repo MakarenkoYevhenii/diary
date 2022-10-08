@@ -3,6 +3,9 @@ import axios from "axios";
   const instance = axios.create({
   baseURL: "https://podchitat.herokuapp.com/api/dails",
 });
+//   const instance = axios.create({
+//   baseURL: "https://localhost:4500.com/api/dails",
+// });
 const addToken = token => {
   instance.defaults.headers.common.Authorization = `Bearer ${token}`;
 }

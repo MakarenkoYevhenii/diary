@@ -1,12 +1,12 @@
 import axios from "axios";
 
 
-// const auth=axios.create({
-//   baseURL:"http://podchitat.herokuapp.com/api/user/"
-// })
 const auth=axios.create({
-  baseURL:"http://localhost:4500/api/user/"
+  baseURL:"http://podchitat.herokuapp.com/api/user/"
 })
+// const auth=axios.create({
+//   baseURL:"http://localhost:4500/api/user/"
+// })
 const addToken = token => {
    auth.defaults.headers.common.Authorization = `Bearer ${token}`;
 }
