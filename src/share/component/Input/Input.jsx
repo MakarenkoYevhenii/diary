@@ -10,6 +10,7 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import { categories } from "../../categories";
 
 const style = {
   position: "absolute",
@@ -63,38 +64,8 @@ const InputChange = (open) => {
     const result = await changeItemFetch(open.id, data);
   };
   const { ModalOpen, handleClose } = open;
-  const categories = [
-    "RESTAURANTS",
-    "GROCERIES",
-    "MEDICAL",
-    "INSURANCE",
-    "CAR PAYMENT",
-    "GAS",
-    "CAR MAINTENANCE",
-    "UTILITIES",
-    "MORTGAGE/RENT",
-    "PHONE",
-    "HOUSEHOLD ITEMS",
-    "CLEANING PRODUCTS AND SUPPLIES",
-    "LAWN AND GARDEN",
-    "TOOLS",
-    "KIDS",
-    "CLOTHING",
-    "SHOES",
-    "TOILETRIES",
-    "MAKEUP AND BEAUTY ITEMS",
-    "PET",
-    "“FUN” MONEY",
-    "ENTERTAINMENT",
-    "EVENTS/DATE NIGHT",
-    "HOBBIES/RECREATION",
-    "TRAVEL/VACATIONS",
-    "GIFTS",
-    "CHARITABLE GIVING",
-    "MISCELLANEOUS",
-  ];
+  
 
-  console.log(data);
   return (
     <div>
       <Modal

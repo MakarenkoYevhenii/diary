@@ -15,12 +15,13 @@ import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
 import { current } from "../../redux/auth/auth-operation";
 import InputChange from "../../share/component/Input/Input";
-import { Input, TextField } from "@mui/material";
+import { FormControl, Input, MenuItem, Select, TextField } from "@mui/material";
 import Charts from "../ChartsComponent/ChartsComponent";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import moment from "moment";
+import { categories } from "../../share/categories";
 
 function Body() {
   const [open, setOpen] = useState(false);
@@ -31,6 +32,7 @@ function Body() {
   const loginUser = useSelector(getLogin, shallowEqual);
   const [pomulka, setpomulka] = useState("");
   const [date, setDate] = useState("");
+  const [categori, setCategori] = useState("");
   const handleOpen = (id) => {
     setOpen(true);
     setId(id);
@@ -70,25 +72,85 @@ function Body() {
     setFilter(value);
   };
   const filtere = () => {
-    if (filter.length > 0 && date.$d > 0) {
+    if (date!==null && filter.length > 0 && date.$d !== undefined ) {
+      console.log("filter and data");
       return moneyList.filter((id) => {
-        if (id.name.includes(filter) && id.date.substr(0, 10) === toString(date.$d).substr(0, 10)) {
+        if (
+          id.name.includes(filter) &&
+          moment(id.date.substr(0, 10)).format() ===
+            moment(date._d.toDateString()).format()
+        ) {
           return id;
         }
       });
     }
-    if (date._d !== undefined) {
-      
+    if (categori.length > 0 && filter.length > 0) {
+      console.log("categori and filter");
       return moneyList.filter((id) => {
-        return moment(id.date.substr(0,10)).format() === moment(date._d.toDateString()).format();
+        if (id.name.includes(filter) && id.importance === categori) {
+          return id;
+        }
       });
     }
-
+    if (categori.length > 0 && filter.length > 0) {
+      console.log("category and filter");
+      return moneyList.filter((id) => {
+        if (id.name.includes(filter) && id.importance === categori) {
+          return id;
+        }
+      });
+    }
+    if (categori.length > 0 && date!==null&& date._d !== undefined ) {
+      console.log("category and data");
+      return moneyList.filter((id) => {
+        if (
+          moment(id.date.substr(0, 10)).format() ===
+            moment(date._d.toDateString()).format() &&
+          id.importance === categori
+        ) {
+          return id;
+        }
+      });
+    }
+    if (date!==null&&date._d !== undefined) {
+      console.log("prosto data");
+      return moneyList.filter((id) => {
+        return (
+          moment(id.date.substr(0, 10)).format() ===
+          moment(date._d.toDateString()).format()
+        );
+      });
+    }
+    if (categori.length > 0) {
+      console.log("prosto categori");
+      return moneyList.filter((id) => {
+        if (id.importance === categori) {
+          return id;
+        }
+      });
+    }
+    if (date!==null&& filter.length > 0 &&  date.$d !== undefined && categori.length > 0) {
+      console.log("vse srazu");
+      return moneyList.filter((id) => {
+        if (
+          id.name.includes(filter) &&
+          moment(id.date.substr(0, 10)).format() ===
+            moment(date._d.toDateString()).format() &&
+          id.importance === categori
+        ) {
+          return id;
+        }
+      });
+    }
     return moneyList.filter((id) => {
       return id.name.includes(filter);
     });
   };
 
+  const SetCategori = (e) => {
+    setCategori(e.target.value);
+  };
+  console.log(filtere());
 
   return !loginUser || moneyList.length < 0 ? (
     <LoadingComponent></LoadingComponent>
@@ -113,7 +175,22 @@ function Body() {
                 </LocalizationProvider>
               </TableCell>
               <TableCell align="right">Описание</TableCell>
-              <TableCell align="right">Категория</TableCell>
+              <TableCell align="right">
+                <FormControl>
+                  <Select
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={categori}
+                    label="importance"
+                    onChange={SetCategori}
+                    name="importance"
+                  >
+                    {categories.map((categori) => {
+                      return <MenuItem value={categori}>{categori} </MenuItem>;
+                    })}
+                  </Select>
+                </FormControl>
+              </TableCell>
               <TableCell align="right">Стоимость </TableCell>
               <TableCell align="right">
                 {" "}
