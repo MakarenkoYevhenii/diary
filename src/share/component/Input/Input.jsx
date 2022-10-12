@@ -6,6 +6,11 @@ import { Input } from "@mui/material";
 import { useEffect, useState } from "react";
 import { changeItemFetch, createNewItem, findItemFetch } from "../../Money";
 
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+
 const style = {
   position: "absolute",
   top: "50%",
@@ -16,49 +21,80 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
-  
 };
 
 const InputChange = (open) => {
-    const [data,setData]=useState([])
-    const handleChange = ({ target }) => {
-        const { name, value } = target;
-        setData((prevState) => ({
-          ...prevState,
-          [name]: value,
-        }));
-      };
-      const submitForm = (e) => {
-        e.preventDefault();
-        if (open.id===""||open.id===undefined) {
-            createNewItem(data)
-            open.fetchNew()
-            open.handleClose()
-            return setData("")
-        }
-        changeData()
-        open.fetchNew()
-        open.handleClose()
-       return setData("")
-      };
-      const makeMoney = async () => {
-        try {
-          const result = await findItemFetch(open.id);
-          setData(result);
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      useEffect(() => {
-        if (open.id===""||open.id===undefined) {
-            return
-        }
-        makeMoney();
-    }, [open.id]);
-    const changeData = async()=>{
-        const result=  await changeItemFetch(open.id,data)
+  const [data, setData] = useState([]);
+  const handleChange = ({ target }) => {
+    const { name, value } = target;
+    setData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+  const submitForm = (e) => {
+    e.preventDefault();
+    if (open.id === "" || open.id === undefined) {
+      createNewItem(data);
+      open.fetchNew();
+      open.handleClose();
+      return setData("");
     }
-    const {ModalOpen,handleClose}=open
+    changeData();
+    open.fetchNew();
+    open.handleClose();
+    return setData("");
+  };
+  const makeMoney = async () => {
+    try {
+      const result = await findItemFetch(open.id);
+      setData(result);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    if (open.id === "" || open.id === undefined) {
+      return;
+    }
+    makeMoney();
+  }, [open.id]);
+  const changeData = async () => {
+    const result = await changeItemFetch(open.id, data);
+  };
+  const { ModalOpen, handleClose } = open;
+  const categories = [
+    "RESTAURANTS",
+    "GROCERIES",
+    "MEDICAL",
+    "INSURANCE",
+    "CAR PAYMENT",
+    "GAS",
+    "CAR MAINTENANCE",
+    "UTILITIES",
+    "MORTGAGE/RENT",
+    "PHONE",
+    "HOUSEHOLD ITEMS",
+    "CLEANING PRODUCTS AND SUPPLIES",
+    "LAWN AND GARDEN",
+    "TOOLS",
+    "KIDS",
+    "CLOTHING",
+    "SHOES",
+    "TOILETRIES",
+    "MAKEUP AND BEAUTY ITEMS",
+    "PET",
+    "“FUN” MONEY",
+    "ENTERTAINMENT",
+    "EVENTS/DATE NIGHT",
+    "HOBBIES/RECREATION",
+    "TRAVEL/VACATIONS",
+    "GIFTS",
+    "CHARITABLE GIVING",
+    "MISCELLANEOUS",
+  ];
+
+  console.log(data);
   return (
     <div>
       <Modal
@@ -69,30 +105,71 @@ const InputChange = (open) => {
       >
         <form onSubmit={submitForm}>
           <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign:"center"}}>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              sx={{ textAlign: "center" }}
+            >
               Change Form
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Name
+              Name
             </Typography>
-            <Input id="modal-modal-name-input" sx={{width:"100%"}} onChange={handleChange} name="name" value={data.name}></Input>
+            <Input
+              id="modal-modal-name-input"
+              sx={{ width: "100%" }}
+              onChange={handleChange}
+              name="name"
+              value={data.name}
+            ></Input>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Desription
+              Desription
             </Typography>
-            <Input id="modal-modal-name-input" sx={{width:"100%"}} onChange={handleChange} name="description" value={data.description}></Input>
+            <Input
+              id="modal-modal-name-input"
+              sx={{ width: "100%" }}
+              onChange={handleChange}
+              name="description"
+              value={data.description}
+            ></Input>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Category
+              Category
             </Typography>
-            <Input id="modal-modal-name-input" sx={{width:"100%"}} onChange={handleChange} name="importance" value={data.importance}></Input>
+            <FormControl fullWidth>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={data.importance}
+                label="importance"
+                onChange={handleChange}
+                name="importance"
+              >
+                {categories.map((categori)=>{return (<MenuItem value={categori}>{categori} </MenuItem>)})}
+              </Select>
+            </FormControl>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Value
+              Value
             </Typography>
-            <Input id="modal-modal-name-input" sx={{width:"100%"}} onChange={handleChange} name="value" value={data.value}></Input>
-            <Box sx={{mt:2,textAlign:"center"}}>
-              <Button variant="contained" size="large" sx={{mr:5}} type="submit">
-               {open.id===""||open.id===undefined? "Create New":"Change Data" } {" "}
+            <Input
+              id="modal-modal-name-input"
+              sx={{ width: "100%" }}
+              onChange={handleChange}
+              name="value"
+              value={data.value}
+            ></Input>
+            <Box sx={{ mt: 2, textAlign: "center" }}>
+              <Button
+                variant="contained"
+                size="large"
+                sx={{ mr: 5 }}
+                type="submit"
+              >
+                {open.id === "" || open.id === undefined
+                  ? "Create New"
+                  : "Change Data"}{" "}
               </Button>
-              <Button variant="contained" size="large" onClick={handleClose()} >
+              <Button variant="contained" size="large" onClick={handleClose()}>
                 close
               </Button>
             </Box>

@@ -20,6 +20,7 @@ import Charts from "../ChartsComponent/ChartsComponent";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import moment from "moment";
 
 function Body() {
   const [open, setOpen] = useState(false);
@@ -68,20 +69,18 @@ function Body() {
     const { value } = target;
     setFilter(value);
   };
-
   const filtere = () => {
-    if (filter.length > 0 && date.$d.length > 0) {
+    if (filter.length > 0 && date.$d > 0) {
       return moneyList.filter((id) => {
         if (id.name.includes(filter) && id.date.substr(0, 10) === toString(date.$d).substr(0, 10)) {
           return id;
         }
       });
     }
-    if (date.$d !== undefined) {
+    if (date._d !== undefined) {
+      
       return moneyList.filter((id) => {
-        console.log(id.date.substr(0, 10));
-        // console.log(date.$d.toString().substr(0, 10));
-        return id.date.substr(0, 10) === date.$d.toString().substr(0, 10);
+        return moment(id.date.substr(0,10)).format() === moment(date._d.toDateString()).format();
       });
     }
 
@@ -89,7 +88,8 @@ function Body() {
       return id.name.includes(filter);
     });
   };
-  console.log(date);
+
+
   return !loginUser || moneyList.length < 0 ? (
     <LoadingComponent></LoadingComponent>
   ) : (
