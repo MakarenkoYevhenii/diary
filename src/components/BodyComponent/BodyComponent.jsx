@@ -12,10 +12,18 @@ import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 import { getLogin, getToken, getUser } from "../../redux/auth/auth-selector";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import InputLabel from "@mui/material/InputLabel";
 
 import { current } from "../../redux/auth/auth-operation";
 import InputChange from "../../share/component/Input/Input";
-import { FormControl, Input, MenuItem, Select, TextField } from "@mui/material";
+import {
+  FormControl,
+  Input,
+  MenuItem,
+  Select,
+  TablePagination,
+  TextField,
+} from "@mui/material";
 import Charts from "../ChartsComponent/ChartsComponent";
 import LoadingComponent from "../LoadingComponent/LoadingComponent";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -31,8 +39,24 @@ function Body() {
   const userToken = useSelector(getToken, shallowEqual);
   const loginUser = useSelector(getLogin, shallowEqual);
   const [pomulka, setpomulka] = useState("");
-  const [date, setDate] = useState("");
+  const [date, setDate] = useState(null);
   const [categori, setCategori] = useState("");
+
+  // dfmsldkf;lsdkfskdd
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+  // dl;fksldfkl;sdkf
+
   const handleOpen = (id) => {
     setOpen(true);
     setId(id);
@@ -57,7 +81,7 @@ function Body() {
   };
   useEffect(() => {
     makeMoney();
-  }, []);
+  }, [loginUser]);
 
   const deleteItem = (e) => {
     deleteItemFetch(e);
@@ -72,7 +96,7 @@ function Body() {
     setFilter(value);
   };
   const filtere = () => {
-    if (date!==null && filter.length > 0 && date.$d !== undefined ) {
+    if (date !== null && filter.length > 0 && date.$d !== undefined) {
       console.log("filter and data");
       return moneyList.filter((id) => {
         if (
@@ -100,7 +124,7 @@ function Body() {
         }
       });
     }
-    if (categori.length > 0 && date!==null&& date._d !== undefined ) {
+    if (categori.length > 0 && date !== null && date._d !== undefined) {
       console.log("category and data");
       return moneyList.filter((id) => {
         if (
@@ -112,7 +136,7 @@ function Body() {
         }
       });
     }
-    if (date!==null&&date._d !== undefined) {
+    if (date !== null && date._d !== undefined) {
       console.log("prosto data");
       return moneyList.filter((id) => {
         return (
@@ -129,7 +153,12 @@ function Body() {
         }
       });
     }
-    if (date!==null&& filter.length > 0 &&  date.$d !== undefined && categori.length > 0) {
+    if (
+      date !== null &&
+      filter.length > 0 &&
+      date.$d !== undefined &&
+      categori.length > 0
+    ) {
       console.log("vse srazu");
       return moneyList.filter((id) => {
         if (
@@ -150,7 +179,6 @@ function Body() {
   const SetCategori = (e) => {
     setCategori(e.target.value);
   };
-  console.log(filtere());
 
   return !loginUser || moneyList.length < 0 ? (
     <LoadingComponent></LoadingComponent>
@@ -160,12 +188,14 @@ function Body() {
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>Название </TableCell>
-              <TableCell align="right">
+              <TableCell className={style.header__table__Item} align="center">
+                Название
+              </TableCell>
+              <TableCell className={style.header__table__Item} align="center">
                 {" "}
                 <LocalizationProvider dateAdapter={AdapterMoment}>
                   <DatePicker
-                    label="Basic example"
+                    label="Дата"
                     value={date}
                     onChange={(newValue) => {
                       setDate(newValue);
@@ -174,9 +204,15 @@ function Body() {
                   />
                 </LocalizationProvider>
               </TableCell>
-              <TableCell align="right">Описание</TableCell>
-              <TableCell align="right">
-                <FormControl>
+              <TableCell className={style.header__table__Item} align="center">
+                Описание
+              </TableCell>
+              <TableCell className={style.header__table__Item} align="center">
+                <FormControl fullWidth>
+                  <InputLabel id="demo-simple-select-helper-label">
+                    Категория
+                  </InputLabel>
+
                   <Select
                     labelId="demo-simple-select-label"
                     id="demo-simple-select"
@@ -191,14 +227,16 @@ function Body() {
                   </Select>
                 </FormControl>
               </TableCell>
-              <TableCell align="right">Стоимость </TableCell>
-              <TableCell align="right">
+              <TableCell className={style.header__table__Item} align="center">
+                Стоимость{" "}
+              </TableCell>
+              <TableCell className={style.header__table__Item} align="center">
                 {" "}
                 <Button variant="contained" onClick={() => handleOpen()}>
                   добавить нового
                 </Button>
               </TableCell>
-              <TableCell align="right">
+              <TableCell className={style.header__table__Item} align="center">
                 <Input
                   id="modal-modal-name-input"
                   sx={{ width: "100%" }}
@@ -210,19 +248,19 @@ function Body() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filtere().map((row) => (
+            {/* {filtere().map((row) => ( 
               <TableRow
                 key={row._id}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" align="center">
                   {row.name}
                 </TableCell>
-                <TableCell align="right">{row.date.substr(0, 10)}</TableCell>
-                <TableCell align="right">{row.description}</TableCell>
-                <TableCell align="right">{row.importance}</TableCell>
-                <TableCell align="right">{row.value}</TableCell>
-                <TableCell align="right">
+                <TableCell align="center">{row.date.substr(0, 10)}</TableCell>
+                <TableCell align="center">{row.description}</TableCell>
+                <TableCell align="center">{row.importance}</TableCell>
+                <TableCell align="center">{row.value}</TableCell>
+                <TableCell align="center">
                   <Button
                     variant="contained"
                     onClick={() => handleOpen(row._id)}
@@ -230,7 +268,7 @@ function Body() {
                     Изменить
                   </Button>
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="center">
                   <Button
                     variant="outlined"
                     onClick={() => deleteItem(row._id)}
@@ -240,7 +278,59 @@ function Body() {
                 </TableCell>
               </TableRow>
             ))}
-          </TableBody>
+          */}
+            {filtere()
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((row) => {
+                return (
+
+                    <TableRow
+                      key={row._id}
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row" align="center">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="center">
+                        {row.date.substr(0, 10)}
+                      </TableCell>
+                      <TableCell align="center">{row.description}</TableCell>
+                      <TableCell align="center">{row.importance}</TableCell>
+                      <TableCell align="center">{row.value}</TableCell>
+                      <TableCell align="center">
+                        <Button
+                          variant="contained"
+                          onClick={() => handleOpen(row._id)}
+                        >
+                          Изменить
+                        </Button>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Button
+                          variant="outlined"
+                          onClick={() => deleteItem(row._id)}
+                        >
+                          Удалить
+                        </Button>{" "}
+                      </TableCell>
+                    </TableRow>
+                  
+                );
+              })}
+
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={filtere().length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+              sx={{width:"max-content",}}
+              
+            />
+            
+</TableBody>
         </Table>
         <InputChange
           ModalOpen={open}
@@ -249,7 +339,9 @@ function Body() {
           fetchNew={() => makeMoney()}
         ></InputChange>
       </TableContainer>
-      <Charts moneyList={filtere()}></Charts>
+      <div>
+        <Charts moneyList={filtere()}></Charts>
+      </div>
     </>
   );
 }

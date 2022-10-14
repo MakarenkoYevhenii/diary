@@ -1,10 +1,14 @@
 import { useState } from "react";
-import { PieChart, Pie, Sector, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Sector, Cell } from "recharts";
 function Charts(data) {
   const { moneyList } = data;
   const data1 = [
   ];
-
+  // const COLORS = ()=>{
+  //   const randomColor = Math.floor(Math.random()*16777215).toString(16);
+  //   return `#${randomColor}`
+  // }
+  const COLORS=["#f2991e","#7c088a","#a589a4","#6ed56e","#18ee36","#3ab116","#2cd8ec","#967630"  ]
   moneyList.map((id) => {
     let findEl=undefined;
     if (!Boolean(data1.find((el) => el.importance === id.importance))) {
@@ -95,7 +99,7 @@ function Charts(data) {
   const onPieEnter = (_, index) => {
     setState(index);
   };
-
+  
   return (
     // <ResponsiveContainer width="100%" height="100%">
     <PieChart width={800} height={600}>
@@ -110,7 +114,9 @@ function Charts(data) {
         fill="#8884d8"
         dataKey="value"
         onMouseEnter={onPieEnter}
-      />
+      >{data1.map((entry, index) => (
+        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+      ))}</Pie>
     </PieChart>
     //    </ResponsiveContainer>
   );
