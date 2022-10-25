@@ -283,38 +283,36 @@ function Body() {
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
                 return (
-
-                    <TableRow
-                      key={row._id}
-                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                    >
-                      <TableCell component="th" scope="row" align="center">
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="center">
-                        {row.date.substr(0, 10)}
-                      </TableCell>
-                      <TableCell align="center">{row.description}</TableCell>
-                      <TableCell align="center">{row.importance}</TableCell>
-                      <TableCell align="center">{row.value}</TableCell>
-                      <TableCell align="center">
-                        <Button
-                          variant="contained"
-                          onClick={() => handleOpen(row._id)}
-                        >
-                          Изменить
-                        </Button>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Button
-                          variant="outlined"
-                          onClick={() => deleteItem(row._id)}
-                        >
-                          Удалить
-                        </Button>{" "}
-                      </TableCell>
-                    </TableRow>
-                  
+                  <TableRow
+                    key={row._id}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row" align="center">
+                      {row.name}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.date.substr(0, 10)}
+                    </TableCell>
+                    <TableCell align="center">{row.description}</TableCell>
+                    <TableCell align="center">{row.importance}</TableCell>
+                    <TableCell align="center">{row.value}</TableCell>
+                    <TableCell align="center">
+                      <Button
+                        variant="contained"
+                        onClick={() => handleOpen(row._id)}
+                      >
+                        Изменить
+                      </Button>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button
+                        variant="outlined"
+                        onClick={() => deleteItem(row._id)}
+                      >
+                        Удалить
+                      </Button>{" "}
+                    </TableCell>
+                  </TableRow>
                 );
               })}
 
@@ -326,11 +324,9 @@ function Body() {
               page={page}
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
-              sx={{width:"max-content",}}
-              
+              sx={{ width: "max-content" }}
             />
-            
-</TableBody>
+          </TableBody>
         </Table>
         <InputChange
           ModalOpen={open}
