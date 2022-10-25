@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 const auth=axios.create({
-  baseURL:"http://podchitat.herokuapp.com/api/user/"
+  baseURL:"https://podchitat.herokuapp.com/api/user/"
 })
 // const auth=axios.create({
 //   baseURL:"http://localhost:4500/api/user/"
