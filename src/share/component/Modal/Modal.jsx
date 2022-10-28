@@ -14,12 +14,19 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
-  
 };
 
 const MyModal = (open) => {
-    const {ModalOpen,handleClose,handleChange,handleSumbit,version}=open
-
+  const {
+    ModalOpen,
+    handleClose,
+    handleChange,
+    handleSumbit,
+    version,
+    validateEmail,
+    validatePassword,
+    lengthPassword,
+  } = open;
   return (
     <div>
       <Modal
@@ -30,27 +37,74 @@ const MyModal = (open) => {
       >
         <form onSubmit={handleSumbit()}>
           <Box sx={style}>
-            <Typography id="modal-modal-title" variant="h6" component="h2" sx={{textAlign:"center"}}>
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              sx={{ textAlign: "center" }}
+            >
               {version} form
             </Typography>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               Login
             </Typography>
-            <Input id="modal-modal-name-input" sx={{width:"100%"}} onChange={handleChange()} name="email"></Input>
+            <Input
+              id="modal-modal-name-input"
+              sx={{ width: "100%" }}
+              onChange={handleChange()}
+              name="email"
+              placeholder="Email"
+            ></Input>
             <Typography id="modal-modal-description" sx={{ mt: 2 }}>
               Password
             </Typography>
-            <Input id="modal-modal-password-input" sx={{width:"100%"}} onChange={handleChange()} name="password"></Input>
-            {version!=="register"?"":<> <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-              Password repeat
-            </Typography> 
-            <Input id="modal-modal-password-input" sx={{width:"100%"}} onChange={handleChange()} name="password"></Input>
-            </>}
-            <Box sx={{mt:2,textAlign:"center"}}>
-              <Button variant="contained" size="large" sx={{mr:5}} type="submit">
-                {version}{" "}
-              </Button>
-              <Button variant="contained" size="large" onClick={handleClose()} >
+            <Input
+              id="modal-modal-password-input"
+              sx={{ width: "100%" }}
+              onChange={handleChange()}
+              name="password"
+              placeholder="Password"
+            ></Input>
+            {version !== "register" ? (
+              ""
+            ) : (
+              <>
+                {" "}
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                  Password repeat
+                </Typography>
+                <Input
+                  id="modal-modal-password-input"
+                  sx={{ width: "100%" }}
+                  onChange={handleChange()}
+                  name="passwordRepeat"
+                  placeholder="Password"
+                ></Input>
+              </>
+            )}
+            <Box sx={{ mt: 2, textAlign: "center" }}>
+              {validateEmail() || lengthPassword() || validatePassword() ? (
+                <Button
+                  disabled={true}
+                  variant="contained"
+                  size="large"
+                  sx={{ mr: 5 }}
+                  type="submit"
+                >
+                  {version}{" "}
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  size="large"
+                  sx={{ mr: 5 }}
+                  type="submit"
+                >
+                  {version}{" "}
+                </Button>
+              )}
+
+              <Button variant="contained" size="large" onClick={handleClose()}>
                 close
               </Button>
             </Box>

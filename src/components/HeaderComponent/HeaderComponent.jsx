@@ -14,15 +14,20 @@ import { getLogin } from "../../redux/auth/auth-selector";
 import { login, logout, signup } from "../../redux/auth/auth-operation";
 
 function Header() {
+  const initialStateData = { email: "", password: "", passwordRepeat: "" };
   const [open, setOpen] = useState(false);
-  const [data, setData] = useState("");
-  const [version,setVersion]=useState("")
+  const [data, setData] = useState({ ...initialStateData });
+  const [version, setVersion] = useState("");
   const dispatch = useDispatch();
   const userIsLogin = useSelector(getLogin, shallowEqual);
-  const handleOpen = (name) => {setOpen(true)
-    setVersion(name)
+  const handleOpen = (name) => {
+    setOpen(true);
+    setVersion(name);
   };
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setData(...initialStateData);
+  };
   const handleChange = ({ target }) => {
     const { name, value } = target;
     setData((prevState) => ({
@@ -30,17 +35,42 @@ function Header() {
       [name]: value,
     }));
   };
+  const validateEmail = () => {
+    const vakidate = String(data.email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      );
+
+    if (!vakidate) {
+      return true;
+    }
+    return false;
+  };
+  const validatePassword = () => {
+    if (data.password === data.passwordRepeat) {
+      return false;
+    }
+    return true;
+  };
+  const lengthPassword = () => {
+    if (data.password.length < 5) {
+      return true;
+    }
+    return false;
+  };
+  console.log(lengthPassword());
   const submitForm = (e) => {
     e.preventDefault();
 
-    if(version==="login"){
-    return  dispatch(login(data));
+    if (version === "login") {
+      return dispatch(login(data));
     }
-     return dispatch(signup(data))
+    return dispatch(signup(data));
   };
- const logOut=()=>{
-  dispatch(logout())
- }
+  const logOut = () => {
+    dispatch(logout());
+  };
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
@@ -60,18 +90,23 @@ function Header() {
               <Button color="inherit" onClick={logOut}>
                 logout
               </Button>
-            ) : (<>
-              <Button color="inherit" onClick={()=>handleOpen("login")} >
-                 Login
-              </Button>
-              <Button color="inherit" onClick={()=>handleOpen("register")}>
-                 register
-              </Button></>
+            ) : (
+              <>
+                <Button color="inherit" onClick={() => handleOpen("login")}>
+                  Login
+                </Button>
+                <Button color="inherit" onClick={() => handleOpen("register")}>
+                  register
+                </Button>
+              </>
             )}
           </Toolbar>
         </AppBar>
       </Box>
       <Modal
+        validatePassword={validatePassword}
+        validateEmail={validateEmail}
+        lengthPassword={lengthPassword}
         version={version}
         ModalOpen={open}
         handleClose={() => handleClose}

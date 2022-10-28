@@ -109,7 +109,6 @@ function Body() {
       });
     }
     if (categori.length > 0 && filter.length > 0) {
-      console.log("categori and filter");
       return moneyList.filter((id) => {
         if (id.name.includes(filter) && id.importance === categori) {
           return id;
@@ -117,7 +116,6 @@ function Body() {
       });
     }
     if (categori.length > 0 && filter.length > 0) {
-      console.log("category and filter");
       return moneyList.filter((id) => {
         if (id.name.includes(filter) && id.importance === categori) {
           return id;
@@ -125,7 +123,6 @@ function Body() {
       });
     }
     if (categori.length > 0 && date !== null && date._d !== undefined) {
-      console.log("category and data");
       return moneyList.filter((id) => {
         if (
           moment(id.date.substr(0, 10)).format() ===
@@ -137,7 +134,6 @@ function Body() {
       });
     }
     if (date !== null && date._d !== undefined) {
-      console.log("prosto data");
       return moneyList.filter((id) => {
         return (
           moment(id.date.substr(0, 10)).format() ===
@@ -146,7 +142,6 @@ function Body() {
       });
     }
     if (categori.length > 0) {
-      console.log("prosto categori");
       return moneyList.filter((id) => {
         if (id.importance === categori) {
           return id;
@@ -159,7 +154,6 @@ function Body() {
       date.$d !== undefined &&
       categori.length > 0
     ) {
-      console.log("vse srazu");
       return moneyList.filter((id) => {
         if (
           id.name.includes(filter) &&
@@ -248,37 +242,6 @@ function Body() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {filtere().map((row) => ( 
-              <TableRow
-                key={row._id}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row" align="center">
-                  {row.name}
-                </TableCell>
-                <TableCell align="center">{row.date.substr(0, 10)}</TableCell>
-                <TableCell align="center">{row.description}</TableCell>
-                <TableCell align="center">{row.importance}</TableCell>
-                <TableCell align="center">{row.value}</TableCell>
-                <TableCell align="center">
-                  <Button
-                    variant="contained"
-                    onClick={() => handleOpen(row._id)}
-                  >
-                    Изменить
-                  </Button>
-                </TableCell>
-                <TableCell align="center">
-                  <Button
-                    variant="outlined"
-                    onClick={() => deleteItem(row._id)}
-                  >
-                    Удалить
-                  </Button>{" "}
-                </TableCell>
-              </TableRow>
-            ))}
-          */}
             {filtere()
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((row) => {
