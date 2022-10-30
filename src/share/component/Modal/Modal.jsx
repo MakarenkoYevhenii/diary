@@ -2,19 +2,23 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { Input } from "@mui/material";
+import { IconButton, Input, InputAdornment } from "@mui/material";
+import { useState } from "react";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import style from "./Modal.module.css";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
+// const style = {
+//   position: "absolute",
+//   top: "50%",
+//   left: "50%",
+//   transform: "translate(-50%, -50%)",
+//   width: 400,
+//    bgcolor: "background.paper",
+//   border: "2px solid #000",
+//   boxShadow: 24,
+//   p: 40,
+// };
 
 const MyModal = (open) => {
   const {
@@ -27,6 +31,15 @@ const MyModal = (open) => {
     validatePassword,
     lengthPassword,
   } = open;
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <div>
       <Modal
@@ -36,7 +49,7 @@ const MyModal = (open) => {
         aria-describedby="modal-modal-description"
       >
         <form onSubmit={handleSumbit()}>
-          <Box sx={style}>
+          <Box className={style.modal} style={{ bgcolor: "background.paper" }}>
             <Typography
               id="modal-modal-title"
               variant="h6"
@@ -59,11 +72,24 @@ const MyModal = (open) => {
               Password
             </Typography>
             <Input
+              type={showPassword ? "text" : "password"}
               id="modal-modal-password-input"
               sx={{ width: "100%" }}
               onChange={handleChange()}
               name="password"
               placeholder="Password"
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                  >
+                    {showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
             ></Input>
             {version !== "register" ? (
               ""
@@ -74,16 +100,31 @@ const MyModal = (open) => {
                   Password repeat
                 </Typography>
                 <Input
+                  type={showPassword ? "text" : "password"}
                   id="modal-modal-password-input"
                   sx={{ width: "100%" }}
                   onChange={handleChange()}
                   name="passwordRepeat"
                   placeholder="Password"
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        edge="end"
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
                 ></Input>
               </>
             )}
             <Box sx={{ mt: 2, textAlign: "center" }}>
-              {validateEmail() || lengthPassword() || validatePassword() ? (
+              {validateEmail() ||
+              lengthPassword() ||
+              (version === "register" && validatePassword()) ? (
                 <Button
                   disabled={true}
                   variant="contained"

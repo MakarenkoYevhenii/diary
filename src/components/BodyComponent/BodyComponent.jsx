@@ -216,7 +216,11 @@ function Body() {
                     name="importance"
                   >
                     {categories.map((categori) => {
-                      return <MenuItem value={categori}>{categori} </MenuItem>;
+                      return (
+                        <MenuItem sx={{ height: 30 }} value={categori}>
+                          {categori}{" "}
+                        </MenuItem>
+                      );
                     })}
                   </Select>
                 </FormControl>
