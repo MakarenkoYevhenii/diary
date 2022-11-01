@@ -101,7 +101,7 @@ const MyModal = (open) => {
                 </Typography>
                 <Input
                   type={showPassword ? "text" : "password"}
-                  id="modal-modal-password-input"
+                  id="modal-modal-passwordRepeat-input"
                   sx={{ width: "100%" }}
                   onChange={handleChange()}
                   name="passwordRepeat"

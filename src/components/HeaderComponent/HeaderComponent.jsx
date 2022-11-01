@@ -5,7 +5,7 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Modal from "../../share/component/Modal/Modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 
@@ -13,20 +13,23 @@ import { getLogin } from "../../redux/auth/auth-selector";
 
 import { login, logout, signup } from "../../redux/auth/auth-operation";
 
+const initialStateData = { email: "", password: "", passwordRepeat: "" };
 function Header() {
-  const initialStateData = { email: "", password: "", passwordRepeat: "" };
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({ ...initialStateData });
   const [version, setVersion] = useState("");
+
   const dispatch = useDispatch();
   const userIsLogin = useSelector(getLogin, shallowEqual);
+
   const handleOpen = (name) => {
     setOpen(true);
     setVersion(name);
   };
+
   const handleClose = () => {
     setOpen(false);
-    setData(...initialStateData);
+    setData({ ...initialStateData });
   };
   const handleChange = ({ target }) => {
     const { name, value } = target;
@@ -59,18 +62,27 @@ function Header() {
     }
     return false;
   };
-  console.log(lengthPassword());
   const submitForm = (e) => {
     e.preventDefault();
 
     if (version === "login") {
       return dispatch(login(data));
     }
-    return dispatch(signup(data));
+    if (version === "register") {
+      return dispatch(signup(data));
+    }
   };
+
   const logOut = () => {
     dispatch(logout());
   };
+  useEffect(() => {
+    console.log("fdjsfkj");
+    if (userIsLogin) {
+      setOpen(false);
+    }
+  }, [userIsLogin]);
+
   return (
     <>
       <Box sx={{ flexGrow: 1 }}>
